@@ -1,0 +1,228 @@
+---
+title: "Mixture"
+author: "S. Wotherspoon"
+date: "18 November 2015"
+output: html_document
+---
+
+```{r}
+library(RColorBrewer)
+library(ggplot2)
+pal <- brewer.pal(8,"Set1")
+library(MVNSeq)
+```
+
+```{r}
+d <- read.csv("Cod.csv",header=T)
+d$Day <- unlist(lapply(split(d$ID,d$ID),seq_along))
+head(d)
+ggplot(d,aes(x=log(h),y=log(v),col=factor(ID)))+geom_point()+facet_wrap(~ID)
+ggplot(d,aes(x=Day,y=log(v),col=factor(ID)))+geom_point()+facet_wrap(~ID)
+ggplot(d,aes(x=Day,y=log(h),col=factor(ID)))+geom_point()+facet_wrap(~ID)
+```
+
+
+## Test for MVN
+library(MVN)
+d2 <- log(d[1:1999,2:3])
+
+head(d2)
+roystonTest(d2, qqplot=T)
+
+## Individuals
+
+Try to model specific individuals
+
+
+## ID 320
+
+```{r}
+id <- 320
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5)
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5)
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h","v")]))
+km <- kmeans(y,2)
+fit <- mvnMix(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h")]))
+km <- kmeans(y,2)
+fit <- mvnMix(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+
+
+```{r}
+
+y <- log(as.matrix(d[d$ID==id,c("h","v")]))
+km <- kmeans(y,2)
+fit <- mvnHMM(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h")]))
+km <- kmeans(y,2)
+fit <- mvnHMM(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+
+## ID 324
+
+```{r}
+id <- 324
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5)
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5)
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h","v")]))
+km <- kmeans(y,2)
+fit <- mvnMix(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h")]))
+km <- kmeans(y,2)
+fit <- mvnMix(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h","v")]))
+km <- kmeans(y,2)
+fit <- mvnHMM(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+```{r}
+y <- log(as.matrix(d[d$ID==id,c("h")]))
+km <- kmeans(y,2)
+fit <- mvnHMM(y,km$cluster)
+cl <- max.col(fit$pars$P)
+opar <- par(mfrow=c(2,2))
+plot(v~h,data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(v) ~ log(h),data=d[d$ID==id,],pch=16,cex=0.5,col=pal[cl])
+plot(log(d$v[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(v)")
+plot(log(d$h[d$ID==id]),pch=16,cex=0.5,col=pal[cl],xlab="Day",ylab="log(h)")
+par(opar)
+```
+
+
+# All
+
+```{r}
+d1 <- d[d$ID!=380,]
+y <- log(as.matrix(d1[,c("h","v")]))
+km <- kmeans(y,2)
+fit <- grmvnMix(y,km$cluster,unclass(factor(d1$ID)))
+d1$cl <- max.col(do.call(rbind,lapply(fit$pars,function(pars) pars$P)))
+ggplot(d1,aes(x=log(h),y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(h),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+```
+
+
+```{r}
+d1 <- d[d$ID!=380,]
+y <- log(as.matrix(d1[,c("h","v")]))
+km <- kmeans(y,2)
+fit <- grmvnHMM(y,km$cluster,unclass(factor(d1$ID)))
+d1$cl <- max.col(do.call(rbind,lapply(fit$pars,function(pars) pars$P)))
+ggplot(d1,aes(x=log(h),y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(h),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+```
+
+
+# Some
+
+```{r}
+d1 <- d[d$ID %in% c(255,319,320,377,387,396),]
+y <- log(as.matrix(d1[,c("h","v")]))
+km <- kmeans(y,2)
+d1$cl <- km$cluster
+ggplot(d1,aes(x=log(h),y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+```
+
+```{r}
+d1 <- d[d$ID %in% c(255,319,320,377,387,396),]
+y <- log(as.matrix(d1[,c("h","v")]))
+fit <- grmvnMix(y,km$cluster,unclass(factor(d1$ID)))
+d1$cl <- max.col(do.call(rbind,lapply(fit$pars,function(pars) pars$P)))
+ggplot(d1,aes(x=log(h),y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(h),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+```
+
+
+```{r}
+d1 <- d[d$ID %in% c(255,319,320,377,387,396),]
+y <- log(as.matrix(d1[,c("h","v")]))
+km <- kmeans(y,2)
+fit <- grmvnHMM(y,km$cluster,unclass(factor(d1$ID)))
+d1$cl <- max.col(do.call(rbind,lapply(fit$pars,function(pars) pars$P)))
+ggplot(d1,aes(x=log(h),y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(v),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+ggplot(d1,aes(x=Day,y=log(h),col=factor(cl)))+geom_point()+facet_wrap(~ID)
+```
