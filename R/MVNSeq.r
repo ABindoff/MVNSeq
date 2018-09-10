@@ -914,7 +914,7 @@ grmvnHMM <- function(y,cl,gr,
                      verbose=interactive()) {
 
   K <- max(cl)
-  ys <- split.data.frame(y,gr)
+  ys <- split(y,gr)
   cls <- split(cl,gr)
   pars <- mapply(initHMM,y=ys,cl=cls,
                  MoreArgs=list(K=K),
